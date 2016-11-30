@@ -60,6 +60,15 @@ class EdxAdaptXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.preferences
     )
 
+    success_registration_msg = String(
+        default=_(
+            "Successfully registered in Edx Adapt, course is completely ready to start."
+        ),
+        display_name=_("Congrats with successful registeration"),
+        help=_("Congrats message student see after successfully enrolled in Edx Adapt"),
+        scope=Scope.content,
+    )
+
     fail_registration_msg = String(
         default=_(
             "There was a technical issue while we were configuring your adaptive learning session. Please try to "
@@ -71,7 +80,7 @@ class EdxAdaptXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.content,
     )
 
-    editable_fields = ('params', 'skills', 'edx_adapt_api_url', 'fail_registration_msg')
+    editable_fields = ('params', 'skills', 'edx_adapt_api_url', 'success_registration_msg', 'fail_registration_msg')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -114,6 +123,7 @@ class EdxAdaptXBlock(StudioEditableXBlockMixin, XBlock):
             self=self,
             anonymous_student_id=anonymous_student_id,
             student_is_registered=self.student_is_registered,
+            success_registration_msg=self.success_registration_msg,
             fail_registration_msg=self.fail_registration_msg,
         ))
         frag.add_css(self.resource_string("static/css/edxadapt.css"))
@@ -144,7 +154,6 @@ class EdxAdaptXBlock(StudioEditableXBlockMixin, XBlock):
             edx_adapt_api_url=self.edx_adapt_api_url,
             params=self.params,
             skills=self.skills,
-            fail_registration_msg=self.fail_registration_msg,
         )
         frag = Fragment(html)
         return frag
