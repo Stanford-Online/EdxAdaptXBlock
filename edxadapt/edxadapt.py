@@ -128,7 +128,11 @@ class EdxAdaptXBlock(StudioEditableXBlockMixin, XBlock):
         # NOTE(idegtiarov) drop meaningless part of default course_id to decrease length of id which is stored in
         # the database
         return self.course_id.course.replace('course-v1:', '')
-
+    
+    # Decorate the view in order to support multiple devices e.g. mobile
+    # See: https://openedx.atlassian.net/wiki/display/EDUCATOR/Course+Blocks+API
+    # section 'View @supports(multi_device) decorator'
+    @XBlock.supports('multi_device')
     def student_view(self, context=None):
         """
         Configures user in edx-adapt if it wasn't configured before
